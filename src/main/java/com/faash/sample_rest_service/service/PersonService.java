@@ -6,4 +6,7 @@ public interface PersonService {
     void addPerson(Person person);
 
     Person getPersonById(Integer id);
+
+    void deletePersonById(Integer id);
+    void updatePerson(Person person , Integer id);
 }
