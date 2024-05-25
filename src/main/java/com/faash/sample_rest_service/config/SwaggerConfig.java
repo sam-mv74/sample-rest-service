@@ -14,6 +14,7 @@ public class SwaggerConfig {
         @Bean
         public OpenAPI myOpenAPI() {
             Server devServer = new Server();
+            devServer.setUrl("http://localhost:8081");
             devServer.setDescription("Server URL in Development environment");
 
             Contact contact = new Contact();
@@ -25,7 +26,7 @@ public class SwaggerConfig {
                     .title("Sample API")
                     .version("1.0")
                     .contact(contact)
-                    .description("This API exposes endpoints to manage person methods.");
+                    .description("This API exposes endpoints to manage person server methods.");
 
             return new OpenAPI().info(info).servers(List.of(devServer));
         }
