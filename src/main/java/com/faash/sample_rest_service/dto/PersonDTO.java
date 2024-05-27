@@ -1,8 +1,12 @@
 package com.faash.sample_rest_service.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class PersonDTO {
+    @NotBlank (message = "first name is mandatory")
     private String firstname;
 
+    @NotBlank(message = "last name is mandatory")
     private String lastname;
 
     private String phoneNumber;

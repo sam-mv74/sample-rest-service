@@ -1,17 +1,25 @@
-package com.faash.sample_rest_service.model.rest;
+package com.faash.sample_rest_service.http;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
-public class ResponseModel{
+public class ResponseBodyModel<T> {
     private Boolean success;
 
-    private Object result;
+    private T result;
 
     private String message;
 
     private String responseCode;
 
     private UUID trackingCode;
+
+    private List<Error> errors;
+
+    public ResponseBodyModel() {
+        errors = new ArrayList<>();
+    }
 
     public Boolean getSuccess() {
         return success;
@@ -21,11 +29,11 @@ public class ResponseModel{
         this.success = success;
     }
 
-    public Object getResult() {
+    public T getResult() {
         return result;
     }
 
-    public void setResult( Object result) {
+    public void setResult( T result) {
         this.result = result;
     }
 
@@ -51,5 +59,13 @@ public class ResponseModel{
 
     public void setTrackingCode(UUID trackingCode) {
         this.trackingCode = trackingCode;
+    }
+
+    public List<Error> getErrors() {
+        return errors;
+    }
+
+    public void setErrors(List<Error> errors) {
+        this.errors = errors;
     }
 }

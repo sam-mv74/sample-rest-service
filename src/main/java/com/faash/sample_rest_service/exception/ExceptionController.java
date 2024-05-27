@@ -1,6 +1,6 @@
 package com.faash.sample_rest_service.exception;
 
-import com.faash.sample_rest_service.model.rest.ResponseModel;
+import com.faash.sample_rest_service.http.ResponseBodyModel;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,7 +17,7 @@ public class ExceptionController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "500", description = "Internal Server Error",
                     content = @Content(
-                            schema = @Schema(implementation = ResponseModel.class),
+                            schema = @Schema(implementation = ResponseBodyModel.class),
                             examples = @ExampleObject(value = """
                                         {
                                             "success": false,
@@ -28,8 +28,8 @@ public class ExceptionController {
                                         }
                                     """)
                     ))})
-    public ResponseEntity<ResponseModel> handleExceptions(Exception ex) {
-        ResponseModel responseModel = new ResponseModel();
+    public ResponseEntity<ResponseBodyModel> handleExceptions(Exception ex) {
+        ResponseBodyModel responseModel = new ResponseBodyModel();
         responseModel.setSuccess(false);
         responseModel.setMessage(ex.getMessage());
         responseModel.setResponseCode("500");

@@ -1,6 +1,7 @@
 package com.faash.sample_rest_service.controller;
 
-import com.faash.sample_rest_service.model.rest.ResponseModel;
+import com.faash.sample_rest_service.http.HttpHeader;
+import com.faash.sample_rest_service.http.ResponseBodyModel;
 import com.faash.sample_rest_service.dto.PersonDTO;
 import com.faash.sample_rest_service.mapper.PersonMapper;
 import com.faash.sample_rest_service.model.Person;
@@ -12,6 +13,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +36,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Person Added Successfully",
                     content = @Content(
-                            schema = @Schema(implementation = ResponseModel.class),
+                            schema = @Schema(implementation = ResponseBodyModel.class),
                             examples = @ExampleObject(value = """
                                         {
                                             "success": true,
@@ -48,10 +50,10 @@ public class PersonController {
             )
     })
     @PostMapping("/add-person")
-    public ResponseEntity<ResponseModel> addPerson(@RequestHeader(name = "sample") String header, @RequestBody PersonDTO personDTO) {
+    public ResponseEntity<ResponseBodyModel<Void>> addPerson(@RequestHeader(name = HttpHeader.SAMPLE) String header, @RequestBody @Valid PersonDTO personDTO) {
         Person person = PersonMapper.INSTANCE.convertToPerson(personDTO);
         personService.addPerson(person);
-        ResponseModel responseModel = new ResponseModel();
+        ResponseBodyModel<Void> responseModel = new ResponseBodyModel<>();
         responseModel.setSuccess(true);
         responseModel.setMessage("Person Added Successfully");
         responseModel.setResponseCode("200");
@@ -65,14 +67,14 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Person Retrieved Successfully",
                     content = @Content(
-                            schema = @Schema(implementation = ResponseModel.class),
+                            schema = @Schema(implementation = ResponseBodyModel.class),
                             examples = @ExampleObject(value = """
                                         {
                                             "success": true,
                                             "result": {
                                                 "firstname": "ali",
                                                 "lastname": "alipur",
-                                                "phoneNumber": 091298435573,
+                                                "phoneNumber": 09129843557,
                                                 "email":"ali@gmail.com"
                                             },
                                             "message": "Person Retrieved Successfully",
@@ -84,10 +86,10 @@ public class PersonController {
             )
     })
     @GetMapping("/get-person/{personId}")
-    public ResponseEntity<ResponseModel> getPersonById(@PathVariable Integer personId) {
+    public ResponseEntity<ResponseBodyModel<PersonDTO>> getPersonById(@PathVariable Integer personId) {
         Person person = personService.getPersonById(personId);
         PersonDTO personDTO = PersonMapper.INSTANCE.convertToPersonDto(person);
-        ResponseModel responseModel = new ResponseModel();
+        ResponseBodyModel <PersonDTO> responseModel = new ResponseBodyModel<>();
         responseModel.setSuccess(true);
         responseModel.setMessage("Person Retrieved Successfully");
         responseModel.setResponseCode("200");
@@ -102,7 +104,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Person Deleted Successfully",
                     content = @Content(
-                            schema = @Schema(implementation = ResponseModel.class),
+                            schema = @Schema(implementation = ResponseBodyModel.class),
                             examples = @ExampleObject(value = """
                                         {
                                             "success": true,
@@ -116,9 +118,9 @@ public class PersonController {
             )
     })
     @PostMapping("/delete-person/{personId}")
-    public ResponseEntity<ResponseModel> deletePerson(@PathVariable Integer personId) {
+    public ResponseEntity<ResponseBodyModel<Void>> deletePerson(@PathVariable Integer personId) {
         personService.deletePersonById(personId);
-        ResponseModel responseModel = new ResponseModel();
+        ResponseBodyModel<Void> responseModel = new ResponseBodyModel<>();
         responseModel.setSuccess(true);
         responseModel.setMessage("Person Deleted Successfully");
         responseModel.setResponseCode("200");
@@ -132,7 +134,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Person Updated Successfully",
                     content = @Content(
-                            schema = @Schema(implementation = ResponseModel.class),
+                            schema = @Schema(implementation = ResponseBodyModel.class),
                             examples = @ExampleObject(value = """
                                         {
                                             "success": true,
@@ -146,10 +148,10 @@ public class PersonController {
             )
     })
     @PostMapping("/update-person/{personId}")
-    public ResponseEntity<ResponseModel> updatePerson(@PathVariable Integer personId, @RequestBody PersonDTO personDTO) {
+    public ResponseEntity<ResponseBodyModel<Void>> updatePerson(@PathVariable Integer personId, @RequestBody PersonDTO personDTO) {
         Person person = PersonMapper.INSTANCE.convertToPerson(personDTO);
         personService.updatePerson(person, personId);
-        ResponseModel responseModel = new ResponseModel();
+        ResponseBodyModel <Void> responseModel = new ResponseBodyModel<>();
         responseModel.setSuccess(true);
         responseModel.setMessage("Person Updated Successfully");
         responseModel.setResponseCode("200");
@@ -160,7 +162,7 @@ public class PersonController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "400", description = "Not found",
                     content = @Content(
-                            schema = @Schema(implementation = ResponseModel.class),
+                            schema = @Schema(implementation = ResponseBodyModel.class),
                             examples = @ExampleObject(value = """
                                         {
                                             "success": false,
@@ -173,8 +175,8 @@ public class PersonController {
                     ))
     })
     @ExceptionHandler(value = NullPointerException.class)
-    public ResponseEntity<ResponseModel> handleNullPointerException(NullPointerException ex) {
-        ResponseModel responseModel = new ResponseModel();
+    public ResponseEntity<ResponseBodyModel<Void>> handleNullPointerException(NullPointerException ex) {
+        ResponseBodyModel<Void>responseModel = new ResponseBodyModel<>();
         responseModel.setSuccess(false);
         responseModel.setMessage(ex.getMessage());
         responseModel.setResponseCode("400");

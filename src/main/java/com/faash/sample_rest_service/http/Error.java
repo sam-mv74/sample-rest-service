@@ -1,4 +1,4 @@
-package com.faash.sample_rest_service.model.rest;
+package com.faash.sample_rest_service.http;
 
 public class Error {
     private String message;
